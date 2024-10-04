@@ -1,0 +1,23 @@
+{
+  "name": "cse-341-project2",
+  "version": "1.0.0",
+  "description": "Second Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chighwood/cse-341-project2.git"
+  },
+  "author": "Collin Highwood",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chighwood/cse-341-project2/issues"
+  },
+  "homepage": "https://github.com/chighwood/cse-341-project2#readme",
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
