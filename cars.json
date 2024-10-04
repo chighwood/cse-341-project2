@@ -1,0 +1,40 @@
+{
+    "cars": [
+      {
+        "brand": "Toyota",
+        "name": "Corolla",
+        "year": "2020",
+        "bodyStyle": "Sedan",
+        "color": "Blue"
+      },
+      {
+        "brand": "Ford",
+        "name": "Mustang",
+        "year": "2018",
+        "bodyStyle": "Coupe",
+        "color": "Red"
+      },
+      {
+        "brand": "Honda",
+        "name": "Civic",
+        "year": "2022",
+        "bodyStyle": "sedan",
+        "color": "Black"
+      },
+      {
+        "brand": "Tesla",
+        "name": "Model 3",
+        "year": "2021",
+        "bodyStyle": "Sedan",
+        "color": "White"
+      },
+      {
+        "brand": "Chevrolet",
+        "name": "Camaro",
+        "year": "2019",
+        "bodyStyle": "Convertible",
+        "color": "Yellow"
+      }
+    ]
+  }
+  

@@ -10,8 +10,8 @@ const getAll = async (req, res) => {
 };
 
 const getSingle = async (req, res) => {
-    const carVin = new ObjectId(req.params.vin);
-    const result = await mongodb.getDatabase().db().collection('cars').find({ _vin: carVin });
+    const carVin = new ObjectId(req.params.id);
+    const result = await mongodb.getDatabase().db().collection('cars').find({ _id: carId });
     result.toArray().then((cars) => {
         if (cars.length > 0) {
             res.setHeader('Content-Type', 'application/json');
@@ -24,11 +24,11 @@ const getSingle = async (req, res) => {
 
 const createCar = async (req, res) => {
     const car = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
+        brand: req.body.brand,    
+        name: req.body.name,      
+        year: req.body.year,      
+        bodyStyle: req.body.bodyStyle,
+        color: req.body.color     
     };
     const response = await mongodb.getDatabase().db().collection('cars').insertOne(car);
     if (response.acknowledged) {
@@ -39,15 +39,15 @@ const createCar = async (req, res) => {
 };
 
 const updateCar = async (req, res) => {
-    const carVin = new ObjectId(req.params.vin);
+    const carId = new ObjectId(req.params.id);
     const car = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
+        brand: req.body.brand,    
+        name: req.body.name,      
+        year: req.body.year,      
+        bodyStyle: req.body.bodyStyle,
+        color: req.body.color
     };
-    const response = await mongodb.getDatabase().db().collection('cars').replaceOne({ _vin: carVin }, car);
+    const response = await mongodb.getDatabase().db().collection('cars').replaceOne({ _id: carId }, car);
     if (response.modifiedCount > 0) {
         res.status(200).send();
     } else {
@@ -56,8 +56,8 @@ const updateCar = async (req, res) => {
 }
 
 const deleteCar = async (req, res) => {
-    const carNumber = new ObjectId(req.params.vin);
-    const response = await mongodb.getDatabase().db().collection('cars').deleteOne({ _vin: carNumber });
+    const carId = new ObjectId(req.params.id);
+    const response = await mongodb.getDatabase().db().collection('cars').deleteOne({ _id: carId });
     if (response.deletedCount > 0) {
         res.status(200).send();
     } else {

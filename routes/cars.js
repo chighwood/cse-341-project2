@@ -5,19 +5,19 @@ const { body } = router('express-validator')
 const carsController = require('../controllers/cars');
 
 const carsValidation = [
-    body('firstName').isLength({ min: 1 }).withMessage('Required'),
-    body('lastName').isLength({ min: 1 }).withMessage('Required'),
-    body('email').isEmail().withMessage('Invalid email format'),
-    body('favoriteColor').isString().withMessage('Enter any color'),
-    body('birthday').optional().isISO8601().withMessage('Invalid date format'),
+    body('brand').isString().withMessage('Required'),
+    body('name').isString().withMessage('Required'),
+    body('year').isString().matches(/^\d{4}$/).withMessage('Required'),
+    body('bodyStyle').optional().isString().withMessage('Optional'),
+    body('color').withMessage('Required'),
 ];
 
 const carsUpdateValidation = [
-    body('firstName').optional().isLength({ min: 1 }).withMessage('First name must be at least 1 character'),
-    body('lastName').optional().isLength({ min: 1 }).withMessage('Last name must be at least 1 character'),
-    body('email').optional().isEmail().withMessage('Invalid email format'),
-    body('favoriteColor').optional().isString().withMessage('Enter any color'),
-    body('birthday').optional().isISO8601().withMessage('Invalid date format'),
+    body('brand').optional().isString().withMessage('Please enter a brand'),
+    body('name').optional().isString().withMessage('Please enter the name of the vehicle'),
+    body('year').optional().matches(/^\d{4}$/).withMessage('Please enter the year of the vehicle'),
+    body('bodyStyle').optional().isString().withMessage('Optional'),
+    body('color').optional().withMessage('Enter a color'),
 ];
 
 router.get('/', carsController.getAll);
