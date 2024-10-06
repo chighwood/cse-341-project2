@@ -1,5 +1,5 @@
-const dotevn = require('dotenv');
-dotevn.config();
+const dotenv = require('dotenv');
+dotenv.config();
 
 const MongoClient = require('mongodb').MongoClient;
 

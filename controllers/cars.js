@@ -10,7 +10,7 @@ const getAll = async (req, res) => {
 };
 
 const getSingle = async (req, res) => {
-    const carVin = new ObjectId(req.params.id);
+    const carId = new ObjectId(req.params.id);
     const result = await mongodb.getDatabase().db().collection('cars').find({ _id: carId });
     result.toArray().then((cars) => {
         if (cars.length > 0) {
@@ -39,7 +39,7 @@ const createCar = async (req, res) => {
 };
 
 const updateCar = async (req, res) => {
-    const carId = new ObjectId(req.params.id);
+    const carId = req.params.id;
     const car = {
         brand: req.body.brand,    
         name: req.body.name,      

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body } = router('express-validator')
-
+const { body } = require('express-validator');
 const carsController = require('../controllers/cars');
 
 const carsValidation = [
@@ -9,7 +8,7 @@ const carsValidation = [
     body('name').isString().withMessage('Required'),
     body('year').isString().matches(/^\d{4}$/).withMessage('Required'),
     body('bodyStyle').optional().isString().withMessage('Optional'),
-    body('color').withMessage('Required'),
+    body('color').isString().withMessage('Required'),
 ];
 
 const carsUpdateValidation = [
@@ -17,7 +16,7 @@ const carsUpdateValidation = [
     body('name').optional().isString().withMessage('Please enter the name of the vehicle'),
     body('year').optional().matches(/^\d{4}$/).withMessage('Please enter the year of the vehicle'),
     body('bodyStyle').optional().isString().withMessage('Optional'),
-    body('color').optional().withMessage('Enter a color'),
+    body('color').optional().isString().withMessage('Enter a color'),
 ];
 
 router.get('/', carsController.getAll);

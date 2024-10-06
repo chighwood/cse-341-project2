@@ -6,7 +6,7 @@ GET http://localhost:4000/cars
 GET http://localhost:4000/cars/
 
 ### Cars
-GET http://localhost:4000/users
+GET http://localhost:4000/cars
 
 
 ### Contact by VIN from Render
