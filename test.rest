@@ -2,19 +2,12 @@
 ### Cars
 GET http://localhost:4000/cars
 
-### Contact by VIN
-GET http://localhost:4000/cars/
-
-### Cars
-GET http://localhost:4000/cars
-
-
-### Contact by VIN from Render
-GET http://localhost:4000/cars/66f1f1fc229f3bff56b01706
+### Car by ID
+GET http://localhost:4000/cars/6701d88f6b81158243c2390d
 
 ### Update Car
-PUT http://localhost:4000/cars/66f1f1fc229f3bff56b01706
-Content-Type: application/application/json
+PUT http://localhost:4000/cars/6701df0a9a7bd20fd97d51ff HTTP/1.1
+Content-Type: application/json
 
 {
     "brand": "honda",
@@ -23,7 +16,6 @@ Content-Type: application/application/json
     "bodyStyle": "sedan",
     "color": "brown"
 }
-
 ### Create Contact
 POST http://localhost:4000/cars HTTP/1.1
 Content-Type: application/json
@@ -35,40 +27,42 @@ Content-Type: application/json
     "bodyStyle": "suv",
     "color": "white"
 }
-
 ### Delete Contact
-DELETE http://localhost:4000/cars/66f8ba74c2461c3a75a676a9 HTTP/1.1
+DELETE http://localhost:4000/cars/6701ec308855f38ab1448ae4 HTTP/1.1
+
+
+
 
 
 ### Users
-GET https://project1-x6rx.onrender.com/cars
+GET https://cse-341-project2-bgqa.onrender.com/cars
 
 ### Contact by ID from Render
-GET https://project1-x6rx.onrender.com/cars/66f1f1fc229f3bff56b01706
+GET https://cse-341-project2-bgqa.onrender.com/cars/66f1f1fc229f3bff56b01706
 
 ### Update user
-PUT https://project1-x6rx.onrender.com/cars/66f1f1fc229f3bff56b01706
+PUT https://cse-341-project2-bgqa.onrender.com/cars/66f1f1fc229f3bff56b01706
 Content-Type: application/application/json
 
 {
-    "brand": "John",
-    "year": "Smith",
-    "bodyStyle": "john.smith82@gmail.com",
-    "name": "green",
-    "color": "6/23/72"
+    "brand": "honda",
+    "name": "accord",
+    "year": "2016",
+    "bodyStyle": "sedan",
+    "color": "brown"
 }
 
 ### Create Contact
-POST https://project1-x6rx.onrender.com/cars HTTP/1.1
+POST https://cse-341-project2-bgqa.onrender.com/cars HTTP/1.1
 Content-Type: application/json
 
 {
-    "brand": "test",
-    "year": "test",
-    "bodyStyle": "test.test55@gmail.com",
-    "name": "test",
-    "color": "test"
+    "brand": "mazda",
+    "name": "cx-5",
+    "year": "2018",
+    "bodyStyle": "suv",
+    "color": "white"
 }
 
 ### Delete Contact
-DELETE https://project1-x6rx.onrender.com/cars/66f8ba74c2461c3a75a676a9 HTTP/1.1
+DELETE https://cse-341-project2-bgqa.onrender.com/cars/66f8ba74c2461c3a75a676a9 HTTP/1.1
