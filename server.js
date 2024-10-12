@@ -8,7 +8,6 @@ const cors = require('cors');
 const GitHubStrategy = require('passport-github2').Strategy;
 
 app.use(express.json());
-
 const port = process.env.PORT || 4000;
 
 app.use(bodyParser.json())
@@ -19,6 +18,7 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader(
@@ -33,45 +33,65 @@ app.use((req, res, next) => {
 });
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE', 'PATCH'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
+
 app.use('/', require('./routes'));
 
-// passport.use(new GitHubStrategy({
-//     clientID: process.env.GITHUB_CLIENT_ID,
-//     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-//     callbackURL: process.env.CALLBACK_URL
-// },
-//     function (accessToken, refreshToken, profile, done) {
-//         return done(null, profile);
-//     }
-// ));
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.CALLBACK_URL
+},
+    function (accessToken, refreshToken, profile, done) {
+        console.log('GitHub profile:', profile);
+        return done(null, profile);
+    }
+));
 
-// passport.serializeUser((user, done) => {
-//     done(null, user);
-// });
-// passport.deserializeUser((user) => {
-//     done(null, user);
-// });
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
 
-// app.get('/', (req, res) => {
-//     res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out")
-// });
+app.get('/', (req, res) => {
+    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out");
+});
 
-// app.get('/github/callback', passport.authenticate('github', {
-//     failureRedirect: '/api-docs', session: false
-// }),
-//     (req, res) => {
-//         req.session.user = req.user;
-//         res.redirect('/');
-//     });
+app.get('/github/callback', (req, res, next) => {
+    passport.authenticate('github', (err, user, info) => {
+        if (err) {
+            console.error('Authentication Error:', err); // Log the error
+            return res.redirect('/'); // Redirect to home on error
+        }
+        if (!user) {
+            console.error('Authentication failed:', info); // Log info about failure
+            return res.redirect('/'); // Redirect to home on failure
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                console.error('Login Error:', err); // Log login error
+                return res.redirect('/'); // Redirect to home on error
+            }
+            req.session.user = user; // Save user to session
+            res.redirect('/'); // Redirect to home on success
+        });
+    })(req, res, next);
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 mongodb.initDb((err) => {
     if (err) {
         console.log(err);
     }
     else {
-        app.listen(port, () => { console.log(`Running on port ${port}`) });
+        app.listen(port, () => { console.log(`Running on port ${port}`); });
     }
 });
 
