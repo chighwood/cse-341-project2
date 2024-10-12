@@ -31,38 +31,40 @@ app.use((req, res, next) => {
     );
     next();
 });
-app.use(cors({ methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE', 'PATCH'] }));
-app.use(cors({ origin: '*' }));
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE', 'PATCH'],
+}));
 app.use('/', require('./routes'));
 
-passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL
-},
-    function (accessToken, refreshToken, profile, done) {
-        return done(null, profile);
-    }
-));
+// passport.use(new GitHubStrategy({
+//     clientID: process.env.GITHUB_CLIENT_ID,
+//     clientSecret: process.env.GITHUB_CLIENT_SECRET,
+//     callbackURL: process.env.CALLBACK_URL
+// },
+//     function (accessToken, refreshToken, profile, done) {
+//         return done(null, profile);
+//     }
+// ));
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-passport.deserializeUser((user) => {
-    done(null, user);
-});
+// passport.serializeUser((user, done) => {
+//     done(null, user);
+// });
+// passport.deserializeUser((user) => {
+//     done(null, user);
+// });
 
-app.get('/', (req, res) => {
-    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out")
-});
+// app.get('/', (req, res) => {
+//     res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out")
+// });
 
-app.get('/github/callback', passport.authenticate('github', {
-    failureRedirect: '/api-docs', session: false
-}),
-    (req, res) => {
-        req.session.user = req.user;
-        res.redirect('/');
-    });
+// app.get('/github/callback', passport.authenticate('github', {
+//     failureRedirect: '/api-docs', session: false
+// }),
+//     (req, res) => {
+//         req.session.user = req.user;
+//         res.redirect('/');
+//     });
 
 mongodb.initDb((err) => {
     if (err) {

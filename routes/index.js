@@ -4,7 +4,7 @@ const passport = require('passport');
 router.use('/cars', require('./cars'));
 
 router.get('/', (req, res) => {
-    res.send('Hello Collin');
+    res.send('Hello World');
 });
 
 router.get('/login', passport.authenticate('github'), (req, res) => { });

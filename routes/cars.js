@@ -21,8 +21,8 @@ const carsUpdateValidation = [
     body('color').optional().isString().withMessage('Enter a color'),
 ];
 
-router.get('/', isAuthenticated, carsController.getAll);
-router.get('/:id', isAuthenticated, carsController.getSingle);
+router.get('/', carsController.getAll);
+router.get('/:id', carsController.getSingle);
 router.post('/', isAuthenticated, carsValidation, carsController.createCar);
 router.put('/:id', isAuthenticated, carsUpdateValidation, carsController.updateCar);
 router.delete('/:id', isAuthenticated, carsController.deleteCar);

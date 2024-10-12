@@ -2,6 +2,9 @@
 ### Cars
 GET http://localhost:4000/cars
 
+### Login
+GET http://localhost:4000/login
+
 ### Car by ID
 GET http://localhost:4000/cars/6701d88f6b81158243c2390d
 
