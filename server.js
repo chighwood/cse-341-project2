@@ -63,20 +63,20 @@ app.get('/', (req, res) => {
 app.get('/github/callback', (req, res, next) => {
     passport.authenticate('github', (err, user, info) => {
         if (err) {
-            console.error('Authentication Error:', err); // Log the error
-            return res.redirect('/'); // Redirect to home on error
+            console.error('Authentication Error:', err);
+            return res.redirect('/');
         }
         if (!user) {
-            console.error('Authentication failed:', info); // Log info about failure
-            return res.redirect('/'); // Redirect to home on failure
+            console.error('Authentication failed:', info);
+            return res.redirect('/');
         }
         req.logIn(user, (err) => {
             if (err) {
-                console.error('Login Error:', err); // Log login error
-                return res.redirect('/'); // Redirect to home on error
+                console.error('Login Error:', err);
+                return res.redirect('/');
             }
-            req.session.user = user; // Save user to session
-            res.redirect('/'); // Redirect to home on success
+            req.session.user = user;
+            res.redirect('/');
         });
     })(req, res, next);
 });
