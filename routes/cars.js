@@ -3,6 +3,8 @@ const router = express.Router();
 const { body } = require('express-validator');
 const carsController = require('../controllers/cars');
 
+const { isAuthenticated } = require('../middleware/authenticate');
+
 const carsValidation = [
     body('brand').isString().withMessage('Required'),
     body('name').isString().withMessage('Required'),
@@ -19,14 +21,10 @@ const carsUpdateValidation = [
     body('color').optional().isString().withMessage('Enter a color'),
 ];
 
-router.get('/', carsController.getAll);
-
-router.get('/:id', carsController.getSingle);
-
-router.post('/', carsValidation, carsController.createCar);
-
-router.put('/:id', carsUpdateValidation, carsController.updateCar);
-
-router.delete('/:id', carsController.deleteCar);
+router.get('/', isAuthenticated, carsController.getAll);
+router.get('/:id', isAuthenticated, carsController.getSingle);
+router.post('/', isAuthenticated, carsValidation, carsController.createCar);
+router.put('/:id', isAuthenticated, carsUpdateValidation, carsController.updateCar);
+router.delete('/:id', isAuthenticated, carsController.deleteCar);
 
 module.exports = router;
