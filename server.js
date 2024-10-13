@@ -6,6 +6,19 @@ const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
 const GitHubStrategy = require('passport-github2').Strategy;
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+
+const mongoDBUri = process.env.MONGODB_URL;
+
+const store = new MongoDBStore({
+    uri: mongoDBUri,
+    collection: 'sessions',
+});
+
+store.on('error', function (error) {
+    console.error('Session store error:', error);
+});
 
 const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:4000/github/callback';
 
