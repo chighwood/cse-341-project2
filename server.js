@@ -6,7 +6,8 @@ const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
 const GitHubStrategy = require('passport-github2').Strategy;
-
+const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:4000/github/callback';
+require('dotenv').config();
 app.use(express.json());
 const port = process.env.PORT || 4000;
 
