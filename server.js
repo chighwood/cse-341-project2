@@ -68,6 +68,7 @@ app.get('/auth/github', (req, res) => {
 
 
 app.get('/github/callback', (req, res, next) => {
+    console.log('Callback reached');
     passport.authenticate('github', (err, user, info) => {
         if (err) {
             console.error('Authentication Error:', err);
