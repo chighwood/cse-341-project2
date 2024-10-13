@@ -1,13 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./database/database');
-const app = express();
 const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
 const GitHubStrategy = require('passport-github2').Strategy;
+
 const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:4000/github/callback';
-require('dotenv').config();
+
+console.log("Callback URL: ", process.env.CALLBACK_URL);
+
+const app = express();
 app.use(express.json());
 const port = process.env.PORT || 4000;
 
@@ -42,7 +46,7 @@ app.use('/', require('./routes'));
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL
+    callbackURL: process.env.CALLBACK_URL,
 },
     function (accessToken, refreshToken, profile, done) {
         console.log('GitHub profile:', profile);
@@ -57,9 +61,11 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-app.get('/', (req, res) => {
-    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out");
+app.get('/auth/github', (req, res) => {
+    passport.authenticate('github')(req, res);
 });
+
+
 
 app.get('/github/callback', (req, res, next) => {
     passport.authenticate('github', (err, user, info) => {
@@ -80,6 +86,10 @@ app.get('/github/callback', (req, res, next) => {
             res.redirect('/');
         });
     })(req, res, next);
+});
+
+app.get('/', (req, res) => {
+    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out");
 });
 
 app.use((err, req, res, next) => {
