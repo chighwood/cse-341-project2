@@ -50,7 +50,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:4000',
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
 
@@ -97,7 +98,8 @@ app.get('/github/callback', (req, res, next) => {
                 return res.redirect('/');
             }
             req.session.user = user;
-            res.redirect('/');
+            console.log('User logged in:', req.session.user);
+            return res.redirect('/');
         });
     })(req, res, next);
 });
@@ -119,6 +121,5 @@ mongodb.initDb((err) => {
         app.listen(port, () => { console.log(`Running on port ${port}`); });
     }
 });
-
 
 
