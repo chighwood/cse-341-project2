@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const carsController = require('../controllers/cars');
+const carsController = require('../controllers/carsController.js');
 
-const { isAuthenticated } = require('../middleware/authenticate');
+const { isAuthenticated } = require('../middleware/authController.js');
 
 const carsValidation = [
     body('brand').isString().withMessage('Required'),

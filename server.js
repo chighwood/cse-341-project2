@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongodb = require('./database/database');
+// const bodyParser = require('body-parser');
+const mongodb = require('./database/databaseController.js');
 const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
@@ -11,21 +11,24 @@ const CALLBACK_URL = process.env.CALLBACK_URL || 'http://localhost:4000/github/c
 
 console.log("Callback URL: ", process.env.CALLBACK_URL);
 
+// Express API Setup
 const app = express();
 app.use(express.json());
+// app.use(bodyParser.json());
 const port = process.env.PORT || 4000;
 
-app.use(bodyParser.json())
 app.use(session({
     secret: "secret",
     resave: false,
     saveUninitialized: true,
-}))
+}));
+
+// Passport Authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Z-Key, Authorization'
@@ -36,15 +39,18 @@ app.use((req, res, next) => {
     );
     next();
 });
+
 app.use(cors({
     origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
 
-app.use('/', require('./routes'));
+app.use('/', require('./routers/authRouter.js'));
+app.use('/cars', require('./routers/carsRouter.js'));
+app.use('/api-docs', require('./routers/swaggerRouter.js'));
 
-passport.use(new GitHubStrategy({
+const githubstrag = new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: process.env.CALLBACK_URL
@@ -53,7 +59,11 @@ passport.use(new GitHubStrategy({
         console.log('GitHub profile:', profile);
         return done(null, profile);
     }
-));
+);
+
+console.log(githubstrag);
+
+passport.use(githubstrag);
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -61,44 +71,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     done(null, user);
 });
-
-app.get('/auth/github', (req, res) => {
-    passport.authenticate('github')(req, res);
-});
-
-app.get('/', (req, res) => {
-    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out");
-});
-
-app.get('/github/callback', passport.authenticate('github', {
-    failureRedirect: '/api-docs', session: false}),
-    (req, res) => {
-        req.session.user = req.user;
-        res.redirect('/');
-    });
-
-// app.get('/github/callback', (req, res, next) => {
-//     console.log('Callback reached');
-//     passport.authenticate('github', (err, user, info) => {
-//         if (err) {
-//             console.error('Authentication Error:', err);
-//             return res.redirect('/');
-//         }
-//         if (!user) {
-//             console.error('Authentication failed:', info);
-//             return res.redirect('/');
-//         }
-//         req.logIn(user, (err) => {
-//             if (err) {
-//                 console.error('Login Error:', err);
-//                 return res.redirect('/');
-//             }
-//             req.session.user = user;
-//             console.log('User logged in:', req.session.user);
-//             return res.redirect('/');
-//         });
-//     })(req, res, next);
-// });
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -113,5 +85,3 @@ mongodb.initDb((err) => {
         app.listen(port, () => { console.log(`Running on port ${port}`); });
     }
 });
-
-

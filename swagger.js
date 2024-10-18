@@ -6,7 +6,7 @@ const doc = {
         description: 'Cars API'
     },
     host: 'localhost:4000',
-    schemes: ['http'],
+    schemes: ['https', 'http'],
 };
 
 const outputFile = './swagger.json';
