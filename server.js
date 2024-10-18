@@ -37,7 +37,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cors({
-    origin: 'http://localhost:4000',
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
@@ -47,7 +47,7 @@ app.use('/', require('./routes'));
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL,
+    callbackURL: process.env.CALLBACK_URL
 },
     function (accessToken, refreshToken, profile, done) {
         console.log('GitHub profile:', profile);
@@ -66,34 +66,39 @@ app.get('/auth/github', (req, res) => {
     passport.authenticate('github')(req, res);
 });
 
-
-
-app.get('/github/callback', (req, res, next) => {
-    console.log('Callback reached');
-    passport.authenticate('github', (err, user, info) => {
-        if (err) {
-            console.error('Authentication Error:', err);
-            return res.redirect('/');
-        }
-        if (!user) {
-            console.error('Authentication failed:', info);
-            return res.redirect('/');
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                console.error('Login Error:', err);
-                return res.redirect('/');
-            }
-            req.session.user = user;
-            console.log('User logged in:', req.session.user);
-            return res.redirect('/');
-        });
-    })(req, res, next);
-});
-
 app.get('/', (req, res) => {
     res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out");
 });
+
+app.get('/github/callback', passport.authenticate('github', {
+    failureRedirect: '/api-docs', session: false}),
+    (req, res) => {
+        req.session.user = req.user;
+        res.redirect('/');
+    });
+
+// app.get('/github/callback', (req, res, next) => {
+//     console.log('Callback reached');
+//     passport.authenticate('github', (err, user, info) => {
+//         if (err) {
+//             console.error('Authentication Error:', err);
+//             return res.redirect('/');
+//         }
+//         if (!user) {
+//             console.error('Authentication failed:', info);
+//             return res.redirect('/');
+//         }
+//         req.logIn(user, (err) => {
+//             if (err) {
+//                 console.error('Login Error:', err);
+//                 return res.redirect('/');
+//             }
+//             req.session.user = user;
+//             console.log('User logged in:', req.session.user);
+//             return res.redirect('/');
+//         });
+//     })(req, res, next);
+// });
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
